@@ -153,14 +153,12 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(
-            200,
-            req.user,
-            "Current user fetched successfully"
+            new ApiResponse(200, req.user, "Current user fetched successfully")
         )
 });
 
 const verifyEmail = asyncHandler(async (req, res) => {
-    const { emailVerificationToken } = req.params;
+    const { verificationToken } = req.params;
 
     if (!verificationToken) {
         throw new ApiError(400, "Email verification token is missing")
