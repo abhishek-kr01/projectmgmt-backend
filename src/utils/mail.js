@@ -23,7 +23,7 @@ const sendEmail = async (options) => {
     })
 
     const mail = {
-        form: "mail.projectmgmt@example.com",
+        from: "mail.projectmgmt@example.com",
         to: options.email,
         subject: options.subject,
         text: emailTextual,
