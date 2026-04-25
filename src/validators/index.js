@@ -95,6 +95,50 @@ const addMemberToProjectValidator = () => {
     ]
 }
 
+//////////////////////////
+
+const createTaskValidator = () => [
+    body("title")
+        .trim()
+        .notEmpty()
+        .withMessage("Title is required"),
+
+    body("description")
+        .optional()
+        .trim(),
+
+    body("status")
+        .optional()
+        .isIn(["todo", "in-progress", "done"])
+        .withMessage("Invalid status"),
+
+    body("assignedTo")
+        .optional()
+        .isMongoId()
+        .withMessage("Invalid user id"),
+];
+
+const updateTaskValidator = () => [
+    body("title").optional().trim(),
+    body("description").optional().trim(),
+    body("status")
+        .optional()
+        .isIn(["todo", "in-progress", "done"]),
+    body("assignedTo").optional().isMongoId(),
+];
+
+const createSubTaskValidator = () => [
+    body("title")
+        .trim()
+        .notEmpty()
+        .withMessage("Subtask title is required"),
+];
+
+const updateSubTaskValidator = () => [
+    body("title").optional().trim(),
+    body("isCompleted").optional().isBoolean(),
+];
+
 export {
     userRegisterValidator,
     userLoginValidator,
@@ -102,5 +146,10 @@ export {
     userForgotPasswordValidator,
     userResetForgotPasswordValidator,
     createProjectValidator,
-    addMemberToProjectValidator
+    addMemberToProjectValidator,
+    ////////////////
+    createTaskValidator,
+    updateTaskValidator,
+    createSubTaskValidator,
+    updateSubTaskValidator
 }
