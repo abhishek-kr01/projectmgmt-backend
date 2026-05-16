@@ -133,7 +133,7 @@ http://localhost:8000/api/v1
 ## 🛠️ Setup Instructions
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/abhishek-kr01/projectmgmt-backend.git
 cd projectmgmt-backend
 npm install
 npm run dev
