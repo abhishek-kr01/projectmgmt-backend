@@ -139,6 +139,23 @@ const updateSubTaskValidator = () => [
     body("isCompleted").optional().isBoolean(),
 ];
 
+import { body } from "express-validator";
+
+const createNoteValidator = () => [
+    body("content")
+        .trim()
+        .notEmpty()
+        .withMessage("Content is required"),
+];
+
+const updateNoteValidator = () => [
+    body("content")
+        .optional()
+        .trim()
+        .notEmpty()
+        .withMessage("Content cannot be empty"),
+];
+
 export {
     userRegisterValidator,
     userLoginValidator,
@@ -151,5 +168,7 @@ export {
     createTaskValidator,
     updateTaskValidator,
     createSubTaskValidator,
-    updateSubTaskValidator
+    updateSubTaskValidator,
+    createNoteValidator,
+    updateNoteValidator
 }
