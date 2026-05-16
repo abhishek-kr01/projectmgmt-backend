@@ -1,76 +1,70 @@
 # 🚀 projectmgmt Backend
 
-A scalable **Node.js + Express** backend for a project management system with authentication, role-based access control, and task management.
+A scalable **Node.js + Express** backend for a project management system featuring **JWT authentication**, **role-based access control (RBAC)**, **task & subtask management**, and **email workflows** (verification + password reset).
 
 ---
 
-## ⚠️ Project Status
+## ✨ Key Features
 
-🚧 Work in Progress
+### 🔐 Authentication & Security
 
-* ✅ Authentication system completed
-* ✅ Project management module completed
-* ✅ Task & Subtask module implemented
-* ⏳ Improvements & notes features in progress
+* JWT-based authentication (Access + Refresh Tokens)
+* Email verification (token-based)
+* Forgot & Reset Password flow
+* Secure cookie handling
+* Input validation on all endpoints
 
----
+### 🛂 Authorization (RBAC)
 
-## ✨ Features
+* Role-based access control:
 
-### 🔐 Authentication
-
-* JWT Authentication (Access + Refresh Tokens)
-* User Registration & Login
-* Email Verification (Mailtrap)
-* Forgot & Reset Password
-* Change Password
-* Protected Routes
-
----
+  * **Admin**
+  * **Project Admin**
+  * **Member**
+* Fine-grained permissions on projects, tasks, and notes
 
 ### 📁 Project Management
 
 * Create, update, delete projects
-* Get all projects for logged-in user
-* Add/remove project members
-* Update member roles
+* View projects user has access to
+* Manage project members
+* Assign roles within a project
 
----
-
-### 🛂 Role-Based Access Control (RBAC)
-
-* Admin
-* Project Admin
-* Member
-* Permission-based route protection
-
----
-
-### ✅ Task Management
+### ✅ Task & Subtask Management
 
 * Create, update, delete tasks
-* Assign tasks to users
-* Task status tracking (todo, in-progress, done)
-* File attachments support
+* Assign tasks to members
+* Status tracking: **Todo / In Progress / Done**
+* Subtasks with completion tracking
 
----
+### 📝 Notes
 
-### 🔹 Subtask Management
+* Project-level notes (Admin-controlled)
+* Create, update, delete notes
 
-* Create, update, delete subtasks
-* Mark subtasks as completed
+### 📎 File Uploads
+
+* Attach multiple files to tasks
+* Metadata tracking (URL, type, size)
+
+### 📧 Email Workflows
+
+* Email verification
+* Resend verification
+* Password reset emails
+* Mailtrap/Nodemailer integration
 
 ---
 
 ## 🧱 Tech Stack
 
-* Node.js
-* Express.js
-* MongoDB + Mongoose
-* JWT (Authentication)
-* Nodemailer + Mailtrap
-* Multer (File Uploads)
-* Express Validator
+* **Node.js**
+* **Express.js**
+* **MongoDB + Mongoose**
+* **JWT (Authentication)**
+* **Nodemailer + Mailtrap**
+* **Multer (File Uploads)**
+* **Express Validator**
 
 ---
 
@@ -82,58 +76,92 @@ http://localhost:8000/api/v1
 
 ---
 
-## 🔑 Auth Routes
+## 🔑 Authentication Routes
 
-* POST `/auth/register`
-* POST `/auth/login`
-* POST `/auth/logout`
-* GET `/auth/current-user`
-* POST `/auth/change-password`
-* POST `/auth/refresh-token`
-* GET `/auth/verify-email/:token`
-* POST `/auth/forgot-password`
-* POST `/auth/reset-password/:token`
-* POST `/auth/resend-email-verification`
+| Method | Endpoint                          | Description                  |
+| ------ | --------------------------------- | ---------------------------- |
+| POST   | `/auth/register`                  | Register user                |
+| POST   | `/auth/login`                     | Login user                   |
+| POST   | `/auth/logout`                    | Logout (protected)           |
+| GET    | `/auth/current-user`              | Get current user (protected) |
+| POST   | `/auth/change-password`           | Change password (protected)  |
+| POST   | `/auth/refresh-token`             | Refresh access token         |
+| GET    | `/auth/verify-email/:token`       | Verify email                 |
+| POST   | `/auth/forgot-password`           | Request reset                |
+| POST   | `/auth/reset-password/:token`     | Reset password               |
+| POST   | `/auth/resend-email-verification` | Resend email (protected)     |
 
 ---
 
 ## 📁 Project Routes
 
-* GET `/projects`
-* POST `/projects`
-* GET `/projects/:projectId`
-* PUT `/projects/:projectId`
-* DELETE `/projects/:projectId`
+| Method | Endpoint               | Access        |
+| ------ | ---------------------- | ------------- |
+| GET    | `/projects`            | All members   |
+| POST   | `/projects`            | Authenticated |
+| GET    | `/projects/:projectId` | Role-based    |
+| PUT    | `/projects/:projectId` | Admin only    |
+| DELETE | `/projects/:projectId` | Admin only    |
 
-### Members
+---
 
-* GET `/projects/:projectId/members`
-* POST `/projects/:projectId/members`
-* PUT `/projects/:projectId/members/:userId`
-* DELETE `/projects/:projectId/members/:userId`
+## 👥 Member Management
+
+| Method | Endpoint                               |
+| ------ | -------------------------------------- |
+| GET    | `/projects/:projectId/members`         |
+| POST   | `/projects/:projectId/members`         |
+| PUT    | `/projects/:projectId/members/:userId` |
+| DELETE | `/projects/:projectId/members/:userId` |
 
 ---
 
 ## 🧩 Task Routes
 
-* GET `/tasks/:projectId`
-* POST `/tasks/:projectId`
-* GET `/tasks/:projectId/t/:taskId`
-* PUT `/tasks/:projectId/t/:taskId`
-* DELETE `/tasks/:projectId/t/:taskId`
+| Method | Endpoint                      |
+| ------ | ----------------------------- |
+| GET    | `/tasks/:projectId`           |
+| POST   | `/tasks/:projectId`           |
+| GET    | `/tasks/:projectId/t/:taskId` |
+| PUT    | `/tasks/:projectId/t/:taskId` |
+| DELETE | `/tasks/:projectId/t/:taskId` |
 
-### Subtasks
+---
 
-* POST `/tasks/:projectId/t/:taskId/subtasks`
-* PUT `/tasks/:projectId/st/:subTaskId`
-* DELETE `/tasks/:projectId/st/:subTaskId`
+## 🔹 Subtask Routes
+
+| Method | Endpoint                               |
+| ------ | -------------------------------------- |
+| POST   | `/tasks/:projectId/t/:taskId/subtasks` |
+| PUT    | `/tasks/:projectId/st/:subTaskId`      |
+| DELETE | `/tasks/:projectId/st/:subTaskId`      |
+
+---
+
+## 📝 Notes Routes
+
+| Method | Endpoint                      |
+| ------ | ----------------------------- |
+| GET    | `/notes/:projectId`           |
+| POST   | `/notes/:projectId`           |
+| GET    | `/notes/:projectId/n/:noteId` |
+| PUT    | `/notes/:projectId/n/:noteId` |
+| DELETE | `/notes/:projectId/n/:noteId` |
+
+---
+
+## ❤️ Health Check
+
+```
+GET /healthcheck
+```
 
 ---
 
 ## 🛠️ Setup Instructions
 
 ```bash
-git clone https://github.com/abhishek-kr01/projectmgmt-backend.git
+git clone https://github.com/abhishek-kr01/projectmgmt-backend
 cd projectmgmt-backend
 npm install
 npm run dev
@@ -143,7 +171,7 @@ npm run dev
 
 ## 🔐 Environment Variables
 
-```
+```env
 PORT=8000
 MONGO_URI=
 ACCESS_TOKEN_SECRET=
@@ -171,13 +199,13 @@ src/
 
 ---
 
-## 🧠 Concepts Implemented
+## 🧠 Concepts Covered
 
 * Authentication vs Authorization
-* JWT (Access + Refresh Tokens)
+* JWT (Access + Refresh Token)
 * RBAC (Role-Based Access Control)
-* REST API Design
-* Modular Backend Architecture
+* REST API design
+* Scalable backend architecture
 
 ---
 
@@ -187,4 +215,13 @@ src/
 
 ---
 
-⭐ If you found this helpful, consider giving it a star!
+## 🚀 Future Improvements
+
+* Notifications system
+* Activity logs
+* Real-time updates (WebSockets)
+* Frontend integration (React)
+
+---
+
+⭐ If you like this project, consider giving it a star!
